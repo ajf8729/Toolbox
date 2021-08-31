@@ -180,6 +180,25 @@ function New-AppCollections {
     }
 }
 
+function Get-MSIProductCode {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string]$Path
+    )
+    
+    #http://www.scconfigmgr.com/2014/08/22/how-to-get-msi-file-information-with-powershell/
+    $WiObject = New-Object -ComObject WindowsInstaller.Installer
+    $MsiDatabase = $WiObject.GetType().InvokeMember("OpenDatabase","InvokeMethod",$null,$WiObject,@($Path,0))
+    $Query = "SELECT Value FROM Property WHERE Property = 'ProductCode'"
+    $View = $MsiDatabase.GetType().InvokeMember("OpenView","InvokeMethod",$null,$MsiDatabase,($Query))
+    $View.GetType().InvokeMember("Execute", "InvokeMethod", $null, $View, $null)
+    $Record = $View.GetType().InvokeMember("Fetch","InvokeMethod",$null,$View,$null)
+    $MsiProductCode = $Record.GetType().InvokeMember("StringData","GetProperty",$null,$Record,1)
+    
+    return $MsiProductCode.Trim()
+}
+
 if ($IsFreeApp) {
     $UserCollectionProd = "All Users"
 }
@@ -223,10 +242,10 @@ switch ($Type) {
         }
 
         if (Test-PSADT -Path $ContentLocation) {
-            [string]$MsiProductCode = Get-CMAPMsiProductCode -Path "$ContentLocation\Files\$MsiFilename"
+            [string]$MsiProductCode = Get-MSIProductCode -Path "$ContentLocation\Files\$MsiFilename"
         }
         else {
-            [string]$MsiProductCode = Get-CMAPMsiProductCode -Path "$ContentLocation\$MsiFilename"
+            [string]$MsiProductCode = Get-MSIProductCode -Path "$ContentLocation\$MsiFilename"
         }
     }
 }
