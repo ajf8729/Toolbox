@@ -31,7 +31,7 @@ Param(
     [Parameter(Mandatory=$false)]
     [string]$RegKeyName,
     [Parameter(Mandatory=$false)]
-    [switch]$RegKeyContainsVersion,
+    [boolean]$RegKeyContainsVersion,
     [Parameter(Mandatory=$false)]
     [boolean]$Is64bit,
     [Parameter(Mandatory=$true)]
@@ -39,37 +39,10 @@ Param(
     [Parameter(Mandatory=$true)]
     [int]$MaximumRuntimeMins,
     [Parameter(Mandatory=$true)]
-    [ValidateSet(
-        'ALL'
-    )]
-    [string]$DPGroup,
+    [string]$DPGroupName,
     [Parameter(Mandatory=$true)]
-    [ValidateSet(
-        'PROD',
-        'TEST'
-    )]
-    [string]$Environment,
-    [Parameter(Mandatory=$false)]
-    [switch]$IsFreeApp
+    [boolean]$IsFreeApp
 )
-
-if ($IsFreeApp) {
-    $UserCollectionProd = "All Users"
-}
-else {
-    $UserCollectionProd = "$($Name) (Available)"
-}
-$DeviceCollectionProd = "$($Name) (Required)"
-
-$AppPath = "$ContentRootPath\$Name"
-
-if (Test-Path -Path "$AppPath\icon.png") {
-    $IconPath = "$AppPath\icon.png"
-}
-else {
-    Write-Error -Message "Icon path not found"
-    break
-}
 
 function New-DetectionScript {
     [CmdletBinding()]
@@ -179,40 +152,52 @@ function New-AppCollections {
     $UserCollectionName   = "$($AppName) (Available)"
     $DeviceCollectionName = "$($AppName) (Required)"
     $RefreshSchedule = New-CMSchedule -RecurInterval Hours -RecurCount 1
+
+    if (-not (Test-Path -Path ".\UserCollection\Application")) {
+        New-Item -Path ".\UserCollection\" -Name "Application" -ItemType Folder
+    }
+
+    if (-not (Test-Path -Path ".\DeviceCollection\Application")) {
+        New-Item -Path ".\DeviceCollection\" -Name "Application" -ItemType Folder
+    }
     
     if (-not $IsFreeApp) {
         if (-not (Get-CMCollection -CollectionType User -Name $UserCollectionName)) {
             $UserCollection = New-CMCollection -CollectionType User -Name $UserCollectionName -LimitingCollectionId $UserLimitingCollectionId -RefreshSchedule $RefreshSchedule -RefreshType Periodic
+            Move-CMObject -InputObject ($UserCollection) -FolderPath ".\UserCollection\Application"
         }
         else {
             Write-Error -Message "User collection ""$UserCollectionName"" already exists"
             break
         }
-        
-        if (-not (Test-Path -Path ".\UserCollection\Application")) {
-            New-Item -Path ".\UserCollection\" -Name "Application" -ItemType Folder
-        }
-        
-        if ($null -ne $UserCollection) {
-            Move-CMObject -InputObject ($UserCollection) -FolderPath ".\UserCollection\Application"
-        }
     }
     
     if (-not (Get-CMCollection -CollectionType Device -Name $DeviceCollectionName)) {
         $DeviceCollection = New-CMCollection -CollectionType Device -Name $DeviceCollectionName -LimitingCollectionId $DeviceLimitingCollectionId -RefreshSchedule $RefreshSchedule -RefreshType Periodic
+        Move-CMObject -InputObject ($DeviceCollection) -FolderPath ".\DeviceCollection\Application"
     }
     else {
         Write-Error -Message "Device collection ""$DeviceCollectionName"" already exists"
         break
     }
-    
-    if (-not (Test-Path -Path ".\DeviceCollection\Application")) {
-        New-Item -Path ".\DeviceCollection\" -Name "Application" -ItemType Folder
-    }
-    
-    if ($null -ne $DeviceCollection) {
-        Move-CMObject -InputObject ($DeviceCollection) -FolderPath ".\DeviceCollection\Application"
-    }
+}
+
+if ($IsFreeApp) {
+    $UserCollectionProd = "All Users"
+}
+else {
+    $UserCollectionProd = "$($Name) (Available)"
+}
+$DeviceCollectionProd = "$($Name) (Required)"
+
+$AppPath = "$ContentRootPath\$Name"
+
+if (Test-Path -Path "$AppPath\icon.png") {
+    $IconPath = "$AppPath\icon.png"
+}
+else {
+    Write-Error -Message "Icon path not found"
+    break
 }
 
 $Version = (Get-ChildItem -Path "$AppPath" -Directory | Sort-Object -Descending Name | Select-Object -First 1 | Select-Object -ExpandProperty Name)
@@ -273,30 +258,14 @@ Set-CMApplication -Name $AppName -SoftwareVersion $Version -Publisher $Publisher
 
 switch ($Type) {
     "EXE" {
-        switch ($Environment) {
-            "PROD" {
-                Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ScriptLanguage PowerShell -ScriptText $DetectionScriptText -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
-                New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
-                New-CMApplicationDeployment -Name $AppName -CollectionName $DeviceCollectionProd -DeployAction Install -DeployPurpose Required -OverrideServiceWindow $false -RebootOutsideServiceWindow $false -UserNotification DisplaySoftwareCenterOnly | Out-Null
-            }
-            "TEST" {
-                Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ScriptLanguage PowerShell -ScriptText $DetectionScriptText -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
-                New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionTest -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
-            }
-        }
+        Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ScriptLanguage PowerShell -ScriptText $DetectionScriptText -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
+        New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
+        New-CMApplicationDeployment -Name $AppName -CollectionName $DeviceCollectionProd -DeployAction Install -DeployPurpose Required -OverrideServiceWindow $false -RebootOutsideServiceWindow $false -UserNotification DisplaySoftwareCenterOnly | Out-Null
     }
     "MSI" {
-        switch ($Environment) {
-            "PROD" {
-                Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ProductCode $MsiProductCode.Trim() -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
-                New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
-                New-CMApplicationDeployment -Name $AppName -CollectionName $DeviceCollectionProd -DeployAction Install -DeployPurpose Required -OverrideServiceWindow $false -RebootOutsideServiceWindow $false -UserNotification DisplaySoftwareCenterOnly | Out-Null
-            }
-            "TEST" {
-                Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ProductCode $MsiProductCode.Trim() -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
-                New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionTest -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
-            }
-        }
+        Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ProductCode $MsiProductCode.Trim() -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
+        New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
+        New-CMApplicationDeployment -Name $AppName -CollectionName $DeviceCollectionProd -DeployAction Install -DeployPurpose Required -OverrideServiceWindow $false -RebootOutsideServiceWindow $false -UserNotification DisplaySoftwareCenterOnly | Out-Null
     }
 }
 
