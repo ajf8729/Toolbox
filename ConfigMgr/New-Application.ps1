@@ -5,8 +5,6 @@ Param(
     [Parameter(Mandatory=$true)]
     [string]$InstallScriptFilename,
     [Parameter(Mandatory=$true)]
-    [string]$UserCollectionTest,
-    [Parameter(Mandatory=$true)]
     [string]$SiteCode,
     [Parameter(Mandatory=$true)]
     [string]$UserLimitingCollectionId,
