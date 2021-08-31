@@ -257,12 +257,12 @@ Set-CMApplication -Name $AppName -SoftwareVersion $Version -Publisher $Publisher
 switch ($Type) {
     "EXE" {
         Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ScriptLanguage PowerShell -ScriptText $DetectionScriptText -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
-        New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
+        New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroupName | Out-Null
         New-CMApplicationDeployment -Name $AppName -CollectionName $DeviceCollectionProd -DeployAction Install -DeployPurpose Required -OverrideServiceWindow $false -RebootOutsideServiceWindow $false -UserNotification DisplaySoftwareCenterOnly | Out-Null
     }
     "MSI" {
         Add-CMScriptDeploymentType -ApplicationName $AppName -DeploymentTypeName $DeploymentTypeName -InstallCommand $InstallScriptFilename -ProductCode $MsiProductCode.Trim() -ContentLocation $ContentLocation -EstimatedRuntimeMins $EstimatedRuntimeMins -MaximumRuntimeMins $MaximumRuntimeMins -LogonRequirementType WhetherOrNotUserLoggedOn -UserInteractionMode Hidden -InstallationBehaviorType InstallForSystem -ContentFallback -SlowNetworkDeploymentMode Download | Out-Null
-        New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroup | Out-Null
+        New-CMApplicationDeployment -Name $AppName -CollectionName $UserCollectionProd -DeployAction Install -DeployPurpose Available -DistributeContent -DistributionPointGroupName $DPGroupName | Out-Null
         New-CMApplicationDeployment -Name $AppName -CollectionName $DeviceCollectionProd -DeployAction Install -DeployPurpose Required -OverrideServiceWindow $false -RebootOutsideServiceWindow $false -UserNotification DisplaySoftwareCenterOnly | Out-Null
     }
 }
