@@ -1,6 +1,6 @@
-if (Test-Path -Path "$env:SMS_ADMIN_UI_PATH\..\ConfigurationManager.psd1") {
+try {
     Import-Module -FullyQualifiedName "$env:SMS_ADMIN_UI_PATH\..\ConfigurationManagers.psd1"
 }
-else {
+catch {
     Write-Warning -Message $_.Exception.Message
 }
