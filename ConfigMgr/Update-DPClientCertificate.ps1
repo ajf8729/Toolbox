@@ -15,15 +15,16 @@ Set-Location -Path "$($SiteCode):"
 $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 $SubjectName = "CN=ConfigMgr Client $Timestamp"
 $Certificate = Get-Certificate -Url "LDAP:////$($CAName)" -Template $TemplateName -SubjectName $SubjectName -CertStoreLocation "Cert:\LocalMachine\My\"
+$Thumbprint = $Certificate.Certificate.Thumbprint
 $Password = (New-Guid).Guid | ConvertTo-SecureString -AsPlainText -Force
-Export-PfxCertificate -Cert "Cert:\LocalMachine\My\$($Certificate.Certificate.Thumbprint)" -FilePath "C:\$($cert.Certificate.Thumbprint).pfx" -Password $Password | Out-Null
+Export-PfxCertificate -Cert "Cert:\LocalMachine\My\$Thumbprint" -FilePath "C:\$Thumbprint.pfx" -Password $Password | Out-Null
 
 # Loop through DPs and update cert
-$DPs = ((Get-CMDistributionPoint -SiteCode AD0).NetworkOSPath).trim("\\")
+$DPs = ((Get-CMDistributionPoint -SiteCode $SiteCode).NetworkOSPath).trim("\\")
 foreach ($DP in $DPs) {
-    Set-CMDistributionPoint -SiteSystemServerName $DP -CertificatePath "C:\$($cert.Certificate.Thumbprint).pfx" -CertificatePassword $Password -Confirm:$false
+    Set-CMDistributionPoint -SiteSystemServerName $DP -CertificatePath "C:\$Thumbprint.pfx" -CertificatePassword $Password -Confirm:$false
 }
 
 # Remove local copies of cert
-Remove-Item -Path "Cert:\LocalMachine\My\$($Certificate.Certificate.Thumbprint)" -Force
-Remove-Item -Path "C:\$($cert.Certificate.Thumbprint).pfx" -Force
+Remove-Item -Path "Cert:\LocalMachine\My\$Thumbprint" -Force
+Remove-Item -Path "C:\$Thumbprint.pfx" -Force
