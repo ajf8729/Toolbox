@@ -187,7 +187,7 @@ function Get-MSIProductCode {
         [string]$Path
     )
     
-    #http://www.scconfigmgr.com/2014/08/22/how-to-get-msi-file-information-with-powershell/
+    # https://msendpointmgr.com/2014/08/22/how-to-get-msi-file-information-with-powershell/
     $WiObject = New-Object -ComObject WindowsInstaller.Installer
     $MsiDatabase = $WiObject.GetType().InvokeMember("OpenDatabase","InvokeMethod",$null,$WiObject,@($Path,0))
     $Query = "SELECT Value FROM Property WHERE Property = 'ProductCode'"
