@@ -199,7 +199,9 @@ function Get-MSIProductCode {
     return $MsiProductCode.Trim()
 }
 
-Import-Module -FullyQualifiedName "$env:SMS_ADMIN_UI_PATH\..\ConfigurationManager.psd1"
+if ( $null -eq (Get-Module -Name ConfigurationManager) ) {
+    Import-Module -FullyQualifiedName "$env:SMS_ADMIN_UI_PATH\..\ConfigurationManager.psd1"
+}
 
 if ($IsFreeApp) {
     $UserCollectionProd = "All Users"
