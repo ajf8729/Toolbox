@@ -1,7 +1,6 @@
-﻿$Path = "$env:Public\Desktop"
-$Filename = "Software Center.lnk"
+﻿$ShortcutPath = "$env:Public\Desktop\Software Center.lnk"
 
-if (Test-Path -Path "$Path\$Filename") {
+if (Test-Path -Path $ShortcutPath) {
 	return $true
 }
 else {
