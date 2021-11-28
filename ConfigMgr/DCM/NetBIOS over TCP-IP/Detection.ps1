@@ -9,9 +9,4 @@ foreach ($Option in $Options) {
     }
 }
 
-if ($Compliant) {
-    Write-Host "Compliant"
-}
-else {
-    Write-Host "NotCompliant"
-}
+return $Compliant
