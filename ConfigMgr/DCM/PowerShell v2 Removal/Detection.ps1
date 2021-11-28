@@ -1,9 +1,8 @@
-﻿try {
+﻿$Compliant = $true
+
+try {
     if ((((Get-WindowsOptionalFeature -Online -FeatureName MicrosoftWindowsPowerShellV2).State) -match 'Enabled') -or (((Get-WindowsOptionalFeature -Online -FeatureName MicrosoftWindowsPowerShellV2Root).State) -match 'Enabled')) {
-        return $true
-    }
-    else {
-        return $false
+        $Compliant = $false
     }
 }
 
@@ -12,3 +11,5 @@ catch {
     Write-Warning -Message $LastError
     exit 1
 }
+
+return $Compliant
