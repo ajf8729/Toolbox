@@ -18,16 +18,15 @@ try {
         }
         '^6\.(0|1).*' {
             # Windows Vista / Server 2008 / Windows 7 / Server 2008R2
-            if ((((Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name SMB1 -ErrorAction SilentlyContinue).SMB1) -ne '0') -or ((sc.exe qc lanmanworkstation) -match 'MRxSMb10')) {
+            if ((((Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters' -Name SMB1 -ErrorAction SilentlyContinue).SMB1) -ne '0') -or ((sc.exe qc lanmanworkstation) -match 'MRxSMb10')) {
                 $Compliant = $false
             }
         }
         default {
-            throw "Unsupported Operating System"
+            throw 'Unsupported Operating System'
         }
     }
 }
-
 catch {
     $LastError = $Error | Select-Object -First 1 -ExpandProperty Exception | Select-Object -ExpandProperty Message
     Write-Warning -Message $LastError
