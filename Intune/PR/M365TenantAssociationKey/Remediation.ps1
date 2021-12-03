@@ -2,4 +2,4 @@ $TAK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQ
 if (-not (Test-Path -Path 'HKLM:\SOFTWARE\Policies\Microsoft\office\16.0\Common\officesvcmanager')) {
     New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\office\16.0\Common\officesvcmanager' -Force
 }
-New-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\office\16.0\Common\officesvcmanager' -Name 'TenantAssociationKey' -PropertyType SZ -Value $TAK -Force
+New-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\office\16.0\Common\officesvcmanager' -Name 'TenantAssociationKey' -PropertyType String -Value $TAK -Force
