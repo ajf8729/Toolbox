@@ -8,5 +8,4 @@ $ShortcutPath = "$env:Public\Desktop\Company Portal.url"
 $Shell = New-Object -COM WScript.Shell
 $Shortcut = $Shell.CreateShortcut($ShortcutPath)
 $Shortcut.TargetPath = 'CompanyPortal:'
-$Shortcut.Description = 'Company Portal'
 $Shortcut.Save()
