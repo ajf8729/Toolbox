@@ -1,6 +1,6 @@
 [CmdletBinding()]
 Param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$ManagementPointFqdn,
     [Parameter(Mandatory = $true)]
     [ValidateSet(
@@ -16,6 +16,6 @@ Param(
     [string]$Test
 )
 
-$Certificate = Get-ChildItem -Path Cert:\LocalMachine\My\ | Where-Object -FilterScript {$_.EnhancedKeyUsageList -like "Client Authentication (1.3.6.1.5.5.7.3.2)"}
+$Certificate = Get-ChildItem -Path Cert:\LocalMachine\My\ | Where-Object -FilterScript {$_.EnhancedKeyUsageList -like 'Client Authentication (1.3.6.1.5.5.7.3.2)'} | Select-Object -First 1
 
 Invoke-WebRequest -Uri "$($Protocol)://$ManagementPointFqdn/sms_mp/.sms_aut?$Test" -Certificate $Certificate -UseBasicParsing | Select-Object -ExpandProperty Content
