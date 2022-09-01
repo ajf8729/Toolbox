@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  (c) 2006 Microsoft Corporation  -->
+<policyDefinitionResources xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <displayName>enter display name here</displayName>
+  <description>enter description here</description>
+  <resources>
+
+    <stringTable>
+      <string id="Schannel_Category">Schannel</string>
+      <string id="SchannelLogging">Diagnostic Logging</string>
+      <string id="SchannelLogging_Explain">This policy enables Schannel diagnostic logging.  If enabled Schannel verbose logging will be enabled and events will be written to the System log</string>
+      <string id="SchannelClientProtocols">Selectively disable Schannel protocols client-side</string> 
+      <string id="SchannelClientProtocols_Explain">This policy will disable the selected Schannel client protocols for this computer.  This setting is used to control the client-side security protocols that provide identity authentication and secure, private communication through encryption.  Schannel is primarily used for Internet applications that require secure Hypertext Transfer Protocol (HTTP) communications. Different Windows versions support different protocol versions.  For more information see:  https://msdn.microsoft.com/en-us/library/windows/desktop/mt808159(v=vs.85).aspx and https://technet.microsoft.com/en-us/library/dn786433(v=ws.11).aspx
+
+NOTE:  Enabling this policy with all protocols selected will leave TLS 1.2 enabled.  Disabling this policy, or enabling the policy with no protocol selected, will enable all Schannel client protocols.
+      </string>
+      <string id="SchannelServerProtocols">Selectively disable Schannel protocols server-side</string> 
+      <string id="SchannelServerProtocols_Explain">This policy will disable the selected Schannel server protocols for this computer.  This setting is used to control the server-side security protocols that provide identity authentication and secure, private communication through encryption.  Schannel is primarily used for Internet applications that require secure Hypertext Transfer Protocol (HTTP) communications. Different Windows versions support different protocol versions.  For more information see:  https://msdn.microsoft.com/en-us/library/windows/desktop/mt808159(v=vs.85).aspx and https://technet.microsoft.com/en-us/library/dn786433(v=ws.11).aspx
+
+NOTE:  Enabling this policy with all protocols selected will leave TLS 1.2 enabled.  Disabling this policy, or enabling the policy with no protocol selected, will enable all Schannel server protocols.
+      </string>
+      <string id="SchannelCiphers">Selectively disable Schannel ciphers</string> 
+      <string id="SchannelCiphers_Explain">This policy will disable the selected Schannel security ciphers for this computer.  This setting is used to control the use of symmetric algorithms that provide identity authentication and secure, private communication through encryption.  Schannel is primarily used for Internet applications that require secure Hypertext Transfer Protocol (HTTP) communications. Different Windows versions support different ciphers.  For more information see:  https://technet.microsoft.com/en-us/library/dn786433(v=ws.11).aspx and https://technet.microsoft.com/en-us/library/dn786418(v=ws.11).aspx
+
+NOTE:  Enabling this policy with all ciphers selected will leave AES128 and AES256 enabled.  Disabling this policy, or enabling the policy with no cipher selected, will enable all Schannel ciphers.
+      </string>
+      <string id="SchannelHashes">Selectively disable Schannel hashing algorithms</string> 
+      <string id="SchannelHashes_Explain">This policy will disable the selected Schannel security hashing algorithms for this computer.  This setting is used to control the use of hashing algorithms that provide identity authentication and secure, private communication through encryption.  Schannel is primarily used for Internet applications that require secure Hypertext Transfer Protocol (HTTP) communications. Different Windows versions support different hashing algorithms.  For more information see:  https://technet.microsoft.com/en-us/library/dn786433(v=ws.11).aspx and https://technet.microsoft.com/en-us/library/dn786418(v=ws.11).aspx
+
+NOTE:  Enabling this policy with all hashes selected will leave SHA512 enabled.  Disabling this policy, or enabling the policy with no hashing algorithm selected, will enable all Schannel hashing algorithms.
+      </string>
+      <string id="SchannelKE">Selectively disable Schannel key exchange algorithms</string> 
+      <string id="SchannelKE_Explain">This policy will disable the selected Schannel key exchange algorithms for this computer.  This setting is used to control the use of key exchange algorithms that provide identity authentication and secure, private communication through encryption.  Schannel is primarily used for Internet applications that require secure Hypertext Transfer Protocol (HTTP) communications. Different Windows versions support different key exchange algorithms.  For more information see:  https://technet.microsoft.com/en-us/library/dn786433(v=ws.11).aspx and https://technet.microsoft.com/en-us/library/dn786418(v=ws.11).aspx
+
+NOTE:  Enabling this policy with all key exchanges selected will leave ECDH enabled.  Disabling this policy, or enabling the policy with no key exchange algorithm selected, will enable all Schannel key exchange algorithms.
+      </string>
+    </stringTable>
+
+
+    <presentationTable>
+
+      <presentation id="SchannelClientProtocols">
+        <checkBox refId="DisableMPUHClient">Turn off Multi-Protocol Unified Hello client-side protocol</checkBox>
+        <checkBox refId="DisablePCTClient1_0">Turn off PCT 1.0 client-side protocol</checkBox>
+        <checkBox refId="DisableSSLClient2_0">Turn off SSL 2.0 client-side protocol</checkBox>
+        <checkBox refId="DisableSSLClient3_0">Turn off SSL 3.0 client-side protocol</checkBox>
+        <checkBox refId="DisableTLSClient1_0">Turn off TLS 1.0 client-side protocol</checkBox>
+        <checkBox refId="DisableTLSClient1_1">Turn off TLS 1.1 client-side protocol</checkBox>
+      </presentation>
+
+      <presentation id="SchannelServerProtocols">
+        <checkBox refId="DisableMPUHServer">Turn off Multi-Protocol Unified Hello server-side protocol</checkBox>
+        <checkBox refId="DisablePCTServer1_0">Turn off PCT 1.0 server-side protocol</checkBox>
+        <checkBox refId="DisableSSLServer2_0">Turn off SSL 2.0 server-side protocol</checkBox>
+        <checkBox refId="DisableSSLServer3_0">Turn off SSL 3.0 server-side protocol</checkBox>
+        <checkBox refId="DisableTLSServer1_0">Turn off TLS 1.0 server-side protocol</checkBox>
+        <checkBox refId="DisableTLSServer1_1">Turn off TLS 1.1 server-side protocol</checkBox>
+      </presentation>
+
+      <presentation id="SchannelCiphers">
+        <checkBox refId="NULL">Turn off NULL ciphers</checkBox>
+        <checkBox refId="DES_56">Turn off DES 56-bit cipher</checkBox>
+        <checkBox refId="RC2_40">Turn off RC2 40-bit cipher</checkBox>
+        <checkBox refId="RC2_56">Turn off RC2 56-bit cipher</checkBox>
+        <checkBox refId="RC2_128">Turn off RC2 128-bit cipher</checkBox>
+        <checkBox refId="RC4_40">Turn off RC4 40-bit cipher</checkBox>
+        <checkBox refId="RC4_56">Turn off RC4 56-bit cipher</checkBox>
+        <checkBox refId="RC4_64">Turn off RC4 64-bit cipher</checkBox>
+        <checkBox refId="RC4_128">Turn off RC4 128-bit cipher</checkBox>
+        <checkBox refId="3DES_168">Turn off 3DES 168-bit cipher</checkBox>
+      </presentation>
+
+      <presentation id="SchannelHashes">
+        <checkBox refId="MD5">Turn off MD5 hashing algorithm</checkBox>
+        <checkBox refId="SHA">Turn off SHA hashing algorithm</checkBox>
+        <checkBox refId="SHA256">Turn off SHA256 hashing algorithm</checkBox>
+        <checkBox refId="SHA384">Turn off SHA384 hashing algorithm</checkBox>
+      </presentation>
+
+      <presentation id="SchannelKE">
+        <checkBox refId="Diffie-Hellman">Turn off Diffie-Hellman key exchange algorithm</checkBox>
+        <checkBox refId="PKCS">Turn off PKCS key exchange algorithm</checkBox>
+      </presentation>
+
+    </presentationTable>
+
+  </resources>
+</policyDefinitionResources>

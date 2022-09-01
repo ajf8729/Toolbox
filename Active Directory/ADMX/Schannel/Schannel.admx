@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  (c) 2006 Microsoft Corporation  -->
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <policyNamespaces>
+    <target prefix="schannel" namespace="Microsoft.Policies.Schannel" />
+    <using prefix="windows" namespace="Microsoft.Policies.Windows" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+
+  <categories>
+ 
+   <category name="Schannel_Category"
+   displayName="$(string.Schannel_Category)">
+      <parentCategory ref="windows:System" />
+    </category>
+
+ </categories>
+  <policies>
+
+    <policy name="Schannel_Logging" class="Machine" 
+    displayName="$(string.SchannelLogging)"
+    explainText="$(string.SchannelLogging_Explain)"
+    key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"
+    valueName="EventLogging">
+      <parentCategory ref="Schannel_Category" />
+      <supportedOn ref="windows:SUPPORTED_Windows7"/>
+      <enabledValue>
+        <decimal value="7" />
+      </enabledValue>
+      <disabledValue>
+        <decimal value="1" />
+      </disabledValue>
+    </policy>
+
+    <policy name="SchannelClientProtocols" class="Machine"
+    displayName="$(string.SchannelClientProtocols)"
+    explainText="$(string.SchannelClientProtocols_Explain)"
+    presentation="$(presentation.SchannelClientProtocols)"
+    key="Software\Policies\Microsoft\Windows\Schannel"
+    valueName="SchannelClientProtocols">
+      <parentCategory ref="Schannel_Category" />
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <enabledValue>
+        <decimal value="1" />
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0" />
+      </disabledValue>
+      <elements>
+
+        <boolean id="DisableMPUHClient" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Client" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisablePCTClient1_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableSSLClient2_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableSSLClient3_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableTLSClient1_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableTLSClient1_1" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+      </elements>
+    </policy>
+
+    <policy name="SchannelServerProtocols" class="Machine"
+    displayName="$(string.SchannelServerProtocols)"
+    explainText="$(string.SchannelServerProtocols_Explain)"
+    presentation="$(presentation.SchannelServerProtocols)"
+    key="Software\Policies\Microsoft\Windows\Schannel"
+    valueName="SchannelServerProtocols">
+      <parentCategory ref="Schannel_Category" />
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <enabledValue>
+        <decimal value="1" />
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0" />
+      </disabledValue>
+      <elements>
+
+        <boolean id="DisableMPUHServer" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Server" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisablePCTServer1_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Server" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableSSLServer2_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableSSLServer3_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableTLSServer1_0" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DisableTLSServer1_1" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+      </elements>
+    </policy>
+
+
+    <policy name="SchannelCiphers" class="Machine"
+    displayName="$(string.SchannelCiphers)"
+    explainText="$(string.SchannelCiphers_Explain)"
+    presentation="$(presentation.SchannelCiphers)"
+    key="Software\Policies\Microsoft\Windows\Schannel"
+    valueName="SchannelCiphers">
+      <parentCategory ref="Schannel_Category" />
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <enabledValue>
+        <decimal value="1" />
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0" />
+      </disabledValue>
+      <elements>
+
+        <boolean id="NULL" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="DES_56" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC2_40" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC2_56" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC2_128" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC4_40" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC4_56" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC4_64" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 64/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="RC4_128" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="3DES_168" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+      </elements>
+    </policy>
+
+    <policy name="SchannelHashes" class="Machine"
+    displayName="$(string.SchannelHashes)"
+    explainText="$(string.SchannelHashes_Explain)"
+    presentation="$(presentation.SchannelHashes)"
+    key="Software\Policies\Microsoft\Windows\Schannel"
+    valueName="SchannelHashes">
+      <parentCategory ref="Schannel_Category" />
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <enabledValue>
+        <decimal value="1" />
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0" />
+      </disabledValue>
+      <elements>
+
+        <boolean id="MD5" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="SHA" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="SHA256" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA256" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="SHA384" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA384" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+      </elements>
+    </policy>
+
+    <policy name="SchannelKE" class="Machine"
+    displayName="$(string.SchannelKE)"
+    explainText="$(string.SchannelKE_Explain)"
+    presentation="$(presentation.SchannelKE)"
+    key="Software\Policies\Microsoft\Windows\Schannel"
+    valueName="SchannelKE">
+      <parentCategory ref="Schannel_Category" />
+      <supportedOn ref="windows:SUPPORTED_Windows7" />
+      <enabledValue>
+        <decimal value="1" />
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0" />
+      </disabledValue>
+      <elements>
+
+        <boolean id="Diffie-Hellman" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+
+        <boolean id="PKCS" 
+	key="SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\PKCS" 
+	valueName="Enabled">
+          <trueValue>
+            <decimal value="0" />
+          </trueValue>
+          <falseValue>
+            <decimal value="4294967295" />
+          </falseValue>
+        </boolean>
+      </elements>
+    </policy>
+
+  </policies>
+
+</policyDefinitions>
