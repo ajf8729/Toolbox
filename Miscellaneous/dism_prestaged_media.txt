@@ -1,0 +1,33 @@
+diskpart.exe /s %~dp0diskpartition.txt
+
+Select Disk 0
+Clean
+Convert GPT
+Create Partition Primary Size=300
+Format FS=NTFS Label=Recovery Quick Override
+Attributes Volume Set NoDefaultDriveLetter
+Set ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
+GPT Attributes=0x8000000000000001
+Create Partition EFI Size=500
+Format FS=fat32 Label=EFI Quick Override
+Assign Letter=S
+Create Partition MSR Size=128
+Create Partition Primary
+Format FS=NTFS Label=OS Quick Override
+Assign Letter=C
+
+rem copy z:\prestage\PreStageWin10l.wim c:\
+rem DISM.exe /Apply-Image /ImageFile:z:\Prestage\Prestage.2019.11.21.wim /Index:1 /ApplyDir:C:\
+DISM.exe /Apply-Image /ImageFile:z:\Prestage\Prestage.2019.11.21.wim /Index:1 /ApplyDir:C:\
+bcdboot.exe C:\Windows /s S: /f UEFI
+DEL S:\EFI\Microsoft\Boot\BCD /f /q
+COPY C:\EFI\Microsoft\Boot\BCD S:\EFI\Microsoft\Boot /y
+BCDEdit.exe /Store S:\EFI\Microsoft\Boot\BCD /Set {ramdiskoptions} ramdisksdidevice partition=C:
+BCDEdit.exe /Store S:\EFI\Microsoft\Boot\BCD /Set {Default} device ramdisk=[C:]\sources\boot.wim,{ramdiskoptions} 
+BCDEdit.exe /Store S:\EFI\Microsoft\Boot\BCD /Set {Default} osdevice ramdisk=[C:]\sources\boot.wim,{ramdiskoptions}
+BCDEdit.exe /Store S:\EFI\Microsoft\Boot\BCD -set {bootmgr} device partition=S:
+rem desktop
+rem dism /Image:c:\ /add-driver /driver:z:\Content\Drivers\Packages\HP\sp77668 /recurse
+rem Laptop
+rem dism /Image:c:\ /add-driver /driver:z:\Content\Drivers\Packages\HP\sp80616 /recurse
+wpeutil reboot
