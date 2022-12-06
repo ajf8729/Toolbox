@@ -50,12 +50,13 @@ else {
     Write-Host "$AppName already exists, updating it..." -ForegroundColor Green
     Write-Host "Updating release date..." -ForegroundColor Green
     $SupportCenterApp | Set-CMApplication -ReleaseDate (Get-Date) | Out-Null
+    Write-Host "Updating version..." -ForegroundColor Green
+    $SupportCenterApp | Set-CMApplication -SoftwareVersion $Version | Out-Null
     Write-Host "Updating product code..." -ForegroundColor Green
     $SupportCenterApp | Get-CMDeploymentType | Set-CMMsiDeploymentType -ProductCode $ProductCode | Out-Null
     Write-Host "Invoking content redistribution..." -ForegroundColor Green
     Invoke-CMContentRedistribution -InputObject $SupportCenterApp | Out-Null
 }
 Write-Host "All done!" -ForegroundColor Green
-
 # Return to previously stored path
 Set-Location -Path $ReturnPath
