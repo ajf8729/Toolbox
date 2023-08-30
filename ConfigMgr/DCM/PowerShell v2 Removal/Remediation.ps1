@@ -1,5 +1,5 @@
 ﻿try {
-    Start-Process -FilePath 'dism.exe' -ArgumentList '/Online', '/Disable-Feature', '/FeatureName:MicrosoftWindowsPowerShellV2', '/FeatureName:MicrosoftWindowsPowerShellV2Root'
+    Start-Process -FilePath 'dism.exe' -ArgumentList '/Online', '/Disable-Feature', '/FeatureName:MicrosoftWindowsPowerShellV2'
     exit 0
 }
 catch {
