@@ -1,4 +1,6 @@
-﻿$Certificate = @'
+﻿# https://anthonyfontanez.com/index.php/2023/12/30/importing-certificates-with-remediations/
+
+$Certificate = @'
 -----BEGIN CERTIFICATE-----
 MIIC7TCCAdWgAwIBAgIQbz8rVazRoKpPqOJB9x1uSTANBgkqhkiG9w0BAQsFADAm
 MSQwIgYDVQQDExtXU1VTIFB1Ymxpc2hlcnMgU2VsZi1zaWduZWQwHhcNMjMwOTIx
