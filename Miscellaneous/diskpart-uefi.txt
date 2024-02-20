@@ -1,0 +1,16 @@
+select disk 0
+clean
+convert gpt
+
+create partition efi size=128
+format quick fs=fat32
+
+create partition msr size=128
+
+create partition primary size=2048
+format quick fs=ntfs label="Recovery"
+set id="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
+
+create partition primary
+format quick fs=ntfs label="Windows"
+assign letter=c
