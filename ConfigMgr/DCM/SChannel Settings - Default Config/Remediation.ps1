@@ -139,11 +139,11 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40$([char]0x2215)128" -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56$([char]0x2215)128" -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 64$([char]0x2215)128" -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
-New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168' -Name 'Enabled' -Value -1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168' -Name 'Enabled' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5' -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA' -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
-New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA256' -Name 'Enabled' -Value -1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
-New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA384' -Name 'Enabled' -Value -1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA256' -Name 'Enabled' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\SHA384' -Name 'Enabled' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman' -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\PKCS' -Name 'Enabled' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Client' -Name 'Enabled' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue
