@@ -1,5 +1,5 @@
 $AzureArcSetup = Get-WindowsFeature -Name AzureArcSetup
-if ($AzureArcSetup.Installed -eq $false) {
+if (!($AzureArcSetup.Installed -eq $true)) {
     return $true
 }
 else {
