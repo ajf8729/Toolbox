@@ -53,9 +53,13 @@ if ($SecureBootDB -match 'Windows UEFI CA 2023') {
     Start-ScheduledTask -TaskName '\Microsoft\Windows\PI\Secure-Boot-Update'
     for ($i = 0; $i -lt $12; $i++) {
         $event1799 = Get-WinEvent -LogName System -MaxEvents 100 | Where-Object {$_.Id -eq 1799}
-        if (-not $event1799) {
+        $event1800 = Get-WinEvent -LogName System -MaxEvents 100 | Where-Object {$_.Id -eq 1800}
+        if (-not $event1799 -and -not $event1800) {
             $i++
             Start-Sleep -Seconds 10
+        }
+        else {
+            break
         }
     }
     if ($event1799) {
@@ -85,6 +89,15 @@ if ($SecureBootDB -match 'Windows UEFI CA 2023') {
                 Write-Output 'bootmgr.efi is signed with 2023 CA'
                 exit 0
             }
+        }
+    }
+    elseif ($event1800) {
+        if ($RunningAsCcmExec) {
+            return $false
+        }
+        else {
+            Write-Output 'Reboot needed before continuing'
+            exit 1
         }
     }
     else {
