@@ -1,10 +1,19 @@
+$ParentProcessName = (Get-Process -Id ((Get-CimInstance -ClassName Win32_Process -Filter "ProcessId = $PID").ParentProcessId)).ProcessName
+if ($ParentProcessName -eq 'CcmExec') {
+    $RunningAsCcmExec = $true
+}
+
 $WindowsUEFICA2023Capable = Get-ItemPropertyValue -Path HKLM:\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing -Name WindowsUEFICA2023Capable -ErrorAction Ignore
 
 # Check if we are already in expected state, and exit if so
 if ($WindowsUEFICA2023Capable -eq 2) {
-    #return $true
-    Write-Output '"Windows UEFI CA 2023" certificate is in the DB and the system is starting from the 2023 signed boot manager'
-    exit 0
+    if ($RunningAsCcmExec) {
+        return $true
+    }
+    else {
+        Write-Output '"Windows UEFI CA 2023" certificate is in the DB and the system is starting from the 2023 signed boot manager'
+        exit 0
+    }
 }
 
 # Step 1: Install the updated certificate definitions to the DB
@@ -36,19 +45,31 @@ if ([System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes) -matc
         $cert = [System.Security.Cryptography.X509Certificates.X509Certificate]::CreateFromSignedFile('S:\EFI\Microsoft\Boot\bootmgfw.efi')
         mountvol s: /d
         if ($cert.Issuer -ne 'CN=Windows UEFI CA 2023, O=Microsoft Corporation, C=US') {
-            # return $false
-            Write-Output 'bootmgr.efi is not signed with 2023 CA'
-            exit 1
+            if ($RunningAsCcmExec) {
+                return $false
+            }
+            else {
+                Write-Output 'bootmgr.efi is not signed with 2023 CA'
+                exit 1
+            }
         }
         else {
-            # return $true
-            Write-Output 'bootmgr.efi is signed with 2023 CA'
-            exit 0
+            if ($RunningAsCcmExec) {
+                return $true
+            }
+            else {
+                Write-Output 'bootmgr.efi is signed with 2023 CA'
+                exit 0
+            }
         }
     }
     else {
-        # return $false
-        Write-Output 'New signed boot manager installation not detected'
-        exit 1
+        if ($RunningAsCcmExec) {
+            return $false
+        }
+        else {
+            Write-Output 'New signed boot manager installation not detected'
+            exit 1
+        }
     }
 }
