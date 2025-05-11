@@ -18,6 +18,8 @@ if ($WindowsUEFICA2023Capable -eq 2) {
 }
 # Continue with remediation if WindowsUEFICA2023Capable ne 2
 
+$SecureBootDB = [System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes)
+
 # Step 1: Install the updated certificate definitions to the DB
 if ($SecureBootDB -notmatch 'Windows UEFI CA 2023') {
     Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Secureboot -Name AvailableUpdates -Value 0x40 -Force
@@ -44,8 +46,6 @@ if ($SecureBootDB -notmatch 'Windows UEFI CA 2023') {
         }
     }
 }
-
-$SecureBootDB = [System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes)
 
 # Step 2: Update the Boot Manager on your device
 if ($SecureBootDB -match 'Windows UEFI CA 2023') {
