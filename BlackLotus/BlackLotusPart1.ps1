@@ -18,14 +18,34 @@ if ($WindowsUEFICA2023Capable -eq 2) {
 }
 # Continue with remediation if WindowsUEFICA2023Capable ne 2
 
-$SecureBootDB = [System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes)
-
 # Step 1: Install the updated certificate definitions to the DB
 if ($SecureBootDB -notmatch 'Windows UEFI CA 2023') {
     Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Secureboot -Name AvailableUpdates -Value 0x40 -Force
     Start-ScheduledTask -TaskName '\Microsoft\Windows\PI\Secure-Boot-Update'
-    # TODO - watch for TPM event and loop for a bit until it occurs
+    for ($i = 0; $i -lt $12; $i++) {
+        $event1036 = Get-WinEvent -LogName System -MaxEvents 100 | Where-Object {$_.Id -eq 1036}
+        if (-not $event1036) {
+            $i++
+            Start-Sleep -Seconds 10
+        }
+    }
+    if ($event1036) {
+        # Verify Step 1 is complete
+        $WindowsUEFICA2023Capable = Get-ItemPropertyValue -Path HKLM:\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing -Name WindowsUEFICA2023Capable -ErrorAction Ignore
+        # If WindowsUEFICA2023Capable did not change from 0 to 1, exit, else we continue to step 2
+        if ($WindowsUEFICA2023Capable -ne 1) {
+            if ($RunningAsCcmExec) {
+                return $false
+            }
+            else {
+                Write-Output 'Secure Boot DB update did not complete'
+                exit 1
+            }
+        }
+    }
 }
+
+$SecureBootDB = [System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes)
 
 # Step 2: Update the Boot Manager on your device
 if ($SecureBootDB -match 'Windows UEFI CA 2023') {
