@@ -1,3 +1,4 @@
+# Check if running as CcmExec to adjust script output for CI use
 $ParentProcessName = (Get-Process -Id ((Get-CimInstance -ClassName Win32_Process -Filter "ProcessId = $PID").ParentProcessId)).ProcessName
 if ($ParentProcessName -eq 'CcmExec') {
     $RunningAsCcmExec = $true
