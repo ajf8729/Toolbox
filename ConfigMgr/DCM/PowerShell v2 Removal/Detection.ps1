@@ -1,4 +1,10 @@
 ﻿$Compliant = $true
+
+#24H2+
+if ((Get-CimInstance -ClassName Win32_OperatingSystem).BuildNumber -ge 26100) {
+    return $Compliant
+}
+
 $ProductType = (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
 
 switch ($ProductType) {
